@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 class Student extends Component {
     state = {  }
     render() { 
-        return ( <h1>{this.props.student.name}</h1> );
+        return ( <h1>{this.props.student && this.props.student.name}</h1> );
     }
 }
 
