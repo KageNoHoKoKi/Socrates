@@ -15,18 +15,18 @@ class App extends Component {
     this.state = {
       students: [
         {
-          name: 'Shirley',
-          img: 'https://picsum.photos/200/300/?random',
+          name: 'Perry',
+          img: 'https://picsum.photos/200/300?image=1041',
           picked: false
         },
         {
-          name: 'Christian',
-          img: 'https://picsum.photos/200/300/?random',
+          name: 'Ferb',
+          img: 'https://picsum.photos/200/300?image=1042',
           picked: false
         },
         {
-          name: 'Maple',
-          img: 'https://picsum.photos/200/300/?random',
+          name: 'Phineas',
+          img: 'https://picsum.photos/200/300?image=1043',
           picked: false
         }
       ],
@@ -34,20 +34,31 @@ class App extends Component {
       pickedStudent: { name: '', img: '' },
     }
   }
+  resetStudents = () => {
+    let students = this.state.students;
+    console.log("in the function!");
 
+    for (let i = 0; i < this.state.students.length; i++) {
+      console.log(i);
+      students[i].picked = false;
+    }
+  }
 
   pickUniqueStudent = () => {
     const studentsUnpicked = this.state.students.filter(student => student.picked == false);
-    console.log(studentsUnpicked);
-    let pickedStudent = studentsUnpicked[Math.floor(Math.random() * this.state.students.length)];
-    pickedStudent.picked = true;
-
-    return pickedStudent;
+    if (studentsUnpicked.length > 0) {
+      let pickedStudent = studentsUnpicked[Math.floor(Math.random() * studentsUnpicked.length)];
+      pickedStudent.picked = true;
+      return pickedStudent;
+    } else {
+      return {}
+    }
+    // return {}
   }
 
   pickStudent = () => {
     let pickedStudent = null;
-    
+
     if (this.state.pickFromAll == true) {
       pickedStudent = this.pickUniqueStudent();
     } else {
@@ -56,11 +67,11 @@ class App extends Component {
       pickedStudent = this.state.students[index];
     }
 
-    
-      //call this.setState to update our state
-      this.setState(() => ({
-        pickedStudent: pickedStudent
-      }))
+
+    //call this.setState to update our state
+    this.setState(() => ({
+      pickedStudent: pickedStudent
+    }))
   }
 
 
@@ -71,6 +82,26 @@ class App extends Component {
     console.log(this.state.pickFromAll)
   }
 
+  resetButton = () => {
+    let students = this.state.students;
+    let showButton = true;
+    for (let i = 0; i < this.state.students.length; i++) {
+      if (students[i].picked == false) {
+        showButton = false;
+      }
+    }
+    if (showButton) {
+      return <div className='center'>
+          <p>All the students have been picked.</p>
+          <button  className="waves-effect waves-light btn" onClick={this.resetStudents}>Click here to shuffle again</button>
+        </div>
+    } else {
+      console.log(this.state.students.picked)
+      return <p></p>
+
+    }
+  }
+
   render() {
 
     return (
@@ -78,6 +109,11 @@ class App extends Component {
         <Student student={this.state.pickedStudent} />
         <Button handleClicked={this.pickStudent} />
         <Toggle toggled={this.toggleOnAndOff} />
+
+
+        <this.resetButton />
+
+
       </div>
 
     );
